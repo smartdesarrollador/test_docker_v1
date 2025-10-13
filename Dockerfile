@@ -30,17 +30,17 @@ RUN { \
 # Copia Composer desde la imagen oficial
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+RUN docker-php-ext-install pdo pdo_mysql
+RUN pecl install redis && docker-php-ext-enable redis
+
 # Define el directorio de trabajo
 WORKDIR /var/www
 
-# Copia los archivos de definición de Composer primero (para cachear dependencias)
-COPY composer.json composer.lock ./
+# Copia todo el código fuente del proyecto
+COPY . .
 
 # Instala dependencias de producción
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
-
-# Copia el resto del código fuente del proyecto
-COPY . .
 
 # Ajusta permisos para Laravel
 RUN chown -R www-data:www-data /var/www \
@@ -49,10 +49,11 @@ RUN chown -R www-data:www-data /var/www \
 # Variables de entorno (puedes sobrescribirlas en docker-compose)
 ENV APP_ENV=production
 ENV APP_DEBUG=false
-ENV APP_KEY=base64:tuClaveLaravelGenerada
 
 # Expone el puerto donde escucha PHP-FPM
 EXPOSE 9000
 
 # Comando por defecto
 CMD ["php-fpm"]
+
+RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
