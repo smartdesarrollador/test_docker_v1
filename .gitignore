@@ -27,3 +27,7 @@ Thumbs.db
 *.test
 docker-compose.yml.test
 Dockerfile.test
+/docker/nginx/default.conf.test
+docker-compose.yml.production
+Dockerfile.production
+/docker/nginx/default.conf.production
