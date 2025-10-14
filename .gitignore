@@ -31,3 +31,6 @@ Dockerfile.test
 docker-compose.yml.production
 Dockerfile.production
 /docker/nginx/default.conf.production
+docker-compose.yml
+Dockerfile
+/docker/nginx/default.conf
